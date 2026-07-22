@@ -1,0 +1,6 @@
+asgiref==3.12.1
+Django==6.0.7
+sqlparse==0.5.5
+tzdata==2026.3
+[0x7FFA39BC5000] ANOMALY: meaningless REX prefix used
+[0x7FFA39BC5000] ANOMALY: meaningless REX prefix used
