@@ -34,7 +34,7 @@
 				<li><a href="{% url 'store' %}"> All Products </a></li>
 					{% for category in links %}
 				<li><a href="{{ category.get_url }}">{{ category.category_name }}  </a></li>
-				{% endfor %}
+				{% end for %}
 				</ul>
 
 			</div> <!-- card-body.// -->
