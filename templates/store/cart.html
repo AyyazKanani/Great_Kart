@@ -29,7 +29,7 @@
 		<figure class="itemside align-items-center">
 			<div class="aside"><img src="{{ cart_item.product.images.url }}" class="img-sm"></div>
 			<figcaption class="info">
-				<a href="#" class="title text-dark">{{ cart_item.product.images.url }}</a>
+				<a href="#" class="title text-dark">{{ cart_item.product.product_name }}</a>
 				<p class="text-muted small">Color: 25 Mpx <br> Size: Canon</p>
 			</figcaption>
 		</figure>
@@ -51,7 +51,7 @@
 	<td> 
 		<div class="price-wrap"> 
 			<var class="price">${{ cart_item.sub_total }}</var> 
-			<small class="text-muted"> ${{ cart_item.product }} each </small> 
+			<small class="text-muted"> ${{ cart_item.product.price }} each </small> 
 		</div> <!-- price-wrap .// -->
 	</td>
 	<td class="text-right"> 
@@ -74,11 +74,11 @@
 			</dl>
 			<dl class="dlist-align">
 			  <dt>Tax:</dt>
-			  <dd class="text-right"> $10.00</dd>
+			  <dd class="text-right"> ${{tax}}</dd>
 			</dl>
 			<dl class="dlist-align">
-			  <dt>Total:</dt>
-			  <dd class="text-right text-dark b"><strong>$59.97</strong></dd>
+			  <dt>Grand Total:</dt>
+			  <dd class="text-right text-dark b"><strong>$ {{grand_total}} </strong></dd>
 			</dl>
 			<hr>
 			<p class="text-center mb-3">
