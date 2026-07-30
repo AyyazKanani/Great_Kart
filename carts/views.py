@@ -3,6 +3,7 @@ from store.models import Product
 from .models import Cart, CartItem
 from django.http import HttpResponse
 
+
 # Create your views here.
 
 def _cart_id(request):  #By adding -(underscore) it become private
@@ -32,8 +33,6 @@ def add_cart(request, product_id):
             cart = cart,
         )
         cart_item.save()
-    return HttpResponse(cart_item.quantity)
-    exit()
     return redirect('cart')
 
 def cart(request, total=0, quantity=0, cart_item=None):
@@ -51,4 +50,4 @@ def cart(request, total=0, quantity=0, cart_item=None):
         'quantity': quantity,
         'cart_items': cart_items,
     }
-    return render(request, 'store/cart.html')
+    return render(request, 'store/cart.html', context)
