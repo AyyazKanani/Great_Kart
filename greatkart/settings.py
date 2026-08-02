@@ -66,6 +66,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'category.context_processors.menu_links', #this will shown up in every templates
+                'carts.context_processors.counter',
             ],
         },
     },
