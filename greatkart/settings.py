@@ -11,9 +11,23 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Load env variables from .env if exists (simple loader, no extra package needed)
+env_path = BASE_DIR / '.env'
+if env_path.exists():
+    with open(env_path) as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith('#') or '=' not in line:
+                continue
+            key, value = line.split('=', 1)
+            # Remove quotes if present
+            value = value.strip().strip('"').strip("'")
+            os.environ.setdefault(key.strip(), value)
 
 
 # Quick-start development settings - unsuitable for production
@@ -141,12 +155,17 @@ MESSAGE_TAGS = {
     messages.ERROR: 'danger',
 }
 
-# SMTP configuration - For development, show emails in console (no real sending)
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-# When you want to send real emails via Gmail, comment the line above and uncomment below:
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_PORT = 587
-# EMAIL_HOST_USER = 'your_email@gmail.com'
-# EMAIL_HOST_PASSWORD = 'your_16_char_app_password'  # Never commit real password to git
-# EMAIL_USE_TLS = True
-# DEFAULT_FROM_EMAIL = 'your_email@gmail.com'
+# Email configuration
+# By default, show emails in console (safe for development)
+# To send real emails, set EMAIL_BACKEND to smtp and provide credentials via .env file
+if os.environ.get('EMAIL_HOST_USER'):
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.gmail.com')
+EMAIL_PORT = int(os.environ.get('EMAIL_PORT', 587))
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
+EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', 'True') == 'True'
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', EMAIL_HOST_USER if EMAIL_HOST_USER else 'noreply@greatkart.local')
