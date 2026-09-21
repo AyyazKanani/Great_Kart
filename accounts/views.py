@@ -27,7 +27,7 @@ def register(request):
             user.save()
 
             # USER ACTIVATION
-            current_site = get_current_site(request)
+            current_site = request.get_host()
             mail_subject = 'Please activate your account'
             message = render_to_string('accounts/account_verification_email.html', {
                 'user': user,
@@ -95,7 +95,7 @@ def forgotPassword(request):
             user = Account.objects.get(email__iexact=email)
 
             # RESET PASSWORD EMAIL
-            current_site = get_current_site(request)
+            current_site = request.get_host()
             mail_subject = 'Reset Your Password'
             message = render_to_string('accounts/reset_password_email.html', {
                 'user': user,
