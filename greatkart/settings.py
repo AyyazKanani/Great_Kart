@@ -141,11 +141,12 @@ MESSAGE_TAGS = {
     messages.ERROR: 'danger',
 }
 
-# SMTP configuration
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'rathan.kumar049@gmail.com'
-EMAIL_HOST_PASSWORD = ''  # Add your app password here - never commit real password to git
-EMAIL_USE_TLS = True
-# For development, to see emails in console without actually sending:
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# SMTP configuration - For development, show emails in console (no real sending)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# When you want to send real emails via Gmail, comment the line above and uncomment below:
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = 'your_email@gmail.com'
+# EMAIL_HOST_PASSWORD = 'your_16_char_app_password'  # Never commit real password to git
+# EMAIL_USE_TLS = True
+# DEFAULT_FROM_EMAIL = 'your_email@gmail.com'
