@@ -37,11 +37,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'category',
     'accounts',
     'store',
     'carts',
 ]
+
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -137,3 +140,12 @@ from django.contrib.messages import constants as messages
 MESSAGE_TAGS = {
     messages.ERROR: 'danger',
 }
+
+# SMTP configuration
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'rathan.kumar049@gmail.com'
+EMAIL_HOST_PASSWORD = ''  # Add your app password here - never commit real password to git
+EMAIL_USE_TLS = True
+# For development, to see emails in console without actually sending:
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
