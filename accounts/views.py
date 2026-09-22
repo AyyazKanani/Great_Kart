@@ -67,9 +67,19 @@ def login(request):
             except:
                 pass
             auth.login(request, user)
-            # messages.success(request, 'You are now logged in.')
+            messages.success(request, 'You are now logged in.')
+            # Redirect to next page if exists (e.g., checkout)
+            next_url = request.GET.get('next')
+            if next_url:
+                return redirect(next_url)
             return redirect('dashboard')
         else:
+            # Check if account exists but not activated
+            if Account.objects.filter(email__iexact=email).exists():
+                user_exists = Account.objects.get(email__iexact=email)
+                if not user_exists.is_active:
+                    messages.error(request, 'Please activate your account - check your email for activation link')
+                    return redirect('login')
             messages.error(request, 'Invalid login credentials')
             return redirect('login')
     return render(request, 'accounts/login.html')
