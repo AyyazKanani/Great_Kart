@@ -11,6 +11,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage
 from carts.views import _cart_id
 from carts.models import Cart, CartItem
+import requests
 
 # Create your views here.
 
@@ -84,10 +85,15 @@ def login(request):
                 pass
             auth.login(request, user)
             messages.success(request, 'You are now logged in.')
-            # Redirect to next page if exists (e.g., checkout)
-            next_url = request.GET.get('next')
-            if next_url:
-                return redirect(next_url)
+            url = request.META.get('HTTP_REFERER')
+            try:
+                query = requests.utils.urlparse(url).query
+                params = dict(x.split('=') for x in query.split('&'))
+                if 'next' in params:
+                    nextPage = params['next']
+                    return redirect(nextPage)
+            except:
+                pass
             return redirect('dashboard')
         else:
             # Check if account exists but not activated
