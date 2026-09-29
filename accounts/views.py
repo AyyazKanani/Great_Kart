@@ -30,6 +30,12 @@ def register(request):
             user.phone_number = phone_number
             user.save()
 
+            # Create user profile automatically
+            profile = UserProfile()
+            profile.user_id = user.id
+            profile.profile_picture = 'default/default-user.png'
+            profile.save()
+
             # USER ACTIVATION
             current_site = request.get_host()
             mail_subject = 'Please activate your account'
