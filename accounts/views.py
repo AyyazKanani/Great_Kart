@@ -126,6 +126,11 @@ def my_orders(request):
     return render(request, 'accounts/my_orders.html', context)
 
 
+@login_required(login_url='login')
+def edit_profile(request):
+    return render(request, 'accounts/edit_profile.html')
+
+
 @login_required(login_url = 'login')
 def logout(request):
     auth.logout(request)
