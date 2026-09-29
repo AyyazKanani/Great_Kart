@@ -143,20 +143,23 @@ def order_complete(request):
     order_number = request.GET.get('order_number')
     transID = request.GET.get('payment_id')
 
-    order = Order.objects.get(order_number=order_number, is_ordered=True)
-    ordered_products = OrderProduct.objects.filter(order=order)
-    payment = Payment.objects.get(payment_id=transID)
+    try:
+        order = Order.objects.get(order_number=order_number, is_ordered=True)
+        ordered_products = OrderProduct.objects.filter(order_id=order.id)
+        payment = Payment.objects.get(payment_id=transID)
 
-    subtotal = 0
-    for i in ordered_products:
-        subtotal += i.product_price * i.quantity
+        subtotal = 0
+        for i in ordered_products:
+            subtotal += i.product_price * i.quantity
 
-    context = {
-        'order': order,
-        'ordered_products': ordered_products,
-        'order_number': order.order_number,
-        'transID': payment.payment_id,
-        'payment': payment,
-        'subtotal': subtotal,
-    }
-    return render(request, 'orders/order_complete.html', context)
+        context = {
+            'order': order,
+            'ordered_products': ordered_products,
+            'order_number': order.order_number,
+            'transID': payment.payment_id,
+            'payment': payment,
+            'subtotal': subtotal,
+        }
+        return render(request, 'orders/order_complete.html', context)
+    except (Payment.DoesNotExist, Order.DoesNotExist):
+        return redirect('home')
