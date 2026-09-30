@@ -53,25 +53,12 @@
 		</header>
 		<div class="filter-content collapse show" id="collapse_4" style="">
 			<div class="card-body">
-			  <label class="checkbox-btn">
-			    <input type="checkbox">
-			    <span class="btn btn-light"> XS </span>
-			  </label>
-
-			  <label class="checkbox-btn">
-			    <input type="checkbox">
-			    <span class="btn btn-light"> SM </span>
-			  </label>
-
-			  <label class="checkbox-btn">
-			    <input type="checkbox">
-			    <span class="btn btn-light"> LG </span>
-			  </label>
-
-			  <label class="checkbox-btn">
-			    <input type="checkbox">
-			    <span class="btn btn-light"> XXL </span>
-			  </label>
+			  {% for size in all_sizes %}
+			  <a href="?size={{ size }}{% if min_price %}&min_price={{ min_price }}{% endif %}{% if max_price %}&max_price={{ max_price }}{% endif %}" class="btn {% if selected_size == size %}btn-primary{% else %}btn-light{% endif %} mb-1">{{ size }}</a>
+			  {% endfor %}
+			  {% if selected_size %}
+			  <a href="?{% if min_price %}min_price={{ min_price }}&{% endif %}{% if max_price %}max_price={{ max_price }}{% endif %}" class="btn btn-link btn-sm">Clear size</a>
+			  {% endif %}
 		</div><!-- card-body.// -->
 		</div>
 	</article> <!-- filter-group .// -->
@@ -85,35 +72,38 @@
 		</header>
 		<div class="filter-content collapse show" id="collapse_3" style="">
 			<div class="card-body">
-				
+
+				<form method="GET">
+				{% if selected_size %}<input type="hidden" name="size" value="{{ selected_size }}">{% endif %}
 				<div class="form-row">
 				<div class="form-group col-md-6">
 				  <label>Min</label>
-				  <!-- <input class="form-control" placeholder="$0" type="number"> -->
-				  	<select class="mr-2 form-control">
-						<option value="0">$0</option>
-						<option value="50">$50</option>
-						<option value="100">$100</option>
-						<option value="150">$150</option>
-						<option value="200">$200</option>
-						<option value="500">$500</option>
-						<option value="1000">$1000</option>
+				  	<select name="min_price" class="mr-2 form-control">
+						<option value="">$0</option>
+						<option value="50" {% if min_price == '50' %}selected{% endif %}>$50</option>
+						<option value="100" {% if min_price == '100' %}selected{% endif %}>$100</option>
+						<option value="150" {% if min_price == '150' %}selected{% endif %}>$150</option>
+						<option value="200" {% if min_price == '200' %}selected{% endif %}>$200</option>
+						<option value="500" {% if min_price == '500' %}selected{% endif %}>$500</option>
+						<option value="1000" {% if min_price == '1000' %}selected{% endif %}>$1000</option>
 					</select>
 				</div>
 				<div class="form-group text-right col-md-6">
 				  <label>Max</label>
-				  	<select class="mr-2 form-control">
-						<option value="50">$50</option>
-						<option value="100">$100</option>
-						<option value="150">$150</option>
-						<option value="200">$200</option>
-						<option value="500">$500</option>
-						<option value="1000">$1000</option>
-						<option value="2000">$2000+</option>
+				  	<select name="max_price" class="mr-2 form-control">
+						<option value="">$2000+</option>
+						<option value="50" {% if max_price == '50' %}selected{% endif %}>$50</option>
+						<option value="100" {% if max_price == '100' %}selected{% endif %}>$100</option>
+						<option value="150" {% if max_price == '150' %}selected{% endif %}>$150</option>
+						<option value="200" {% if max_price == '200' %}selected{% endif %}>$200</option>
+						<option value="500" {% if max_price == '500' %}selected{% endif %}>$500</option>
+						<option value="1000" {% if max_price == '1000' %}selected{% endif %}>$1000</option>
+						<option value="2000" {% if max_price == '2000' %}selected{% endif %}>$2000+</option>
 					</select>
 				</div>
 				</div> <!-- form-row.// -->
-				<button class="btn btn-block btn-primary">Apply</button>
+				<button type="submit" class="btn btn-block btn-primary">Apply</button>
+				</form>
 			</div><!-- card-body.// -->
 		</div>
 	</article> <!-- filter-group .// -->
@@ -165,7 +155,7 @@
   {% if products.has_other_pages %}
   <ul class="pagination">
 	{% if products.has_previous %}
-    <li class="page-item"><a class="page-link" href="?page={{products.previous_page_number}}">Previous</a></li>
+    <li class="page-item"><a class="page-link" href="?page={{products.previous_page_number}}{% if filter_query %}&{{ filter_query }}{% endif %}">Previous</a></li>
 	{% else %}
     <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
 	{% endif %}
@@ -174,12 +164,12 @@
 	  {% if products.number == i %}
        <li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
 	  {% else %}
-	   <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+ 	   <li class="page-item"><a class="page-link" href="?page={{i}}{% if filter_query %}&{{ filter_query }}{% endif %}">{{i}}</a></li>
 	  {% endif %}
 	{% endfor %}
 
 	{% if products.has_next %}
-        <li class="page-item"><a class="page-link" href="?page={{products.next_page_number}}">Next</a></li>
+        <li class="page-item"><a class="page-link" href="?page={{products.next_page_number}}{% if filter_query %}&{{ filter_query }}{% endif %}">Next</a></li>
 	{% else %}
         <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
 	{% endif %}
