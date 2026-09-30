@@ -52,7 +52,7 @@ def store(request, category_slug=None):
         except ValueError:
             max_price = ''
 
-        paginator = Paginator(products, 3)
+        paginator = Paginator(products, 4)
         page = request.GET.get('page')
         paged_products = paginator.get_page(page)
         product_count = products.count()  # python counting method = count()
