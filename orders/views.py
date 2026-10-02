@@ -11,6 +11,10 @@ import datetime
 # Create your views here.
 
 def place_order(request, total=0, quantity=0):
+    # Not logged in -> no 500 error, just send to login page
+    if not request.user.is_authenticated:
+        return redirect('login')
+
     current_user = request.user
 
     # If the cart count is less than or equal to 0, then redirect back to shop

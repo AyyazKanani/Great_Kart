@@ -24,7 +24,7 @@ def store(request, category_slug=None):
 
     if category_slug != None:
         categories = get_object_or_404(Category, slug=category_slug)
-        products = Product.objects.filter(category=categories, is_available=True)
+        products = Product.objects.filter(category=categories, is_available=True).order_by('id')
         paginator = Paginator(products, 1)
         page = request.GET.get('page')
         paged_products = paginator.get_page(page)
@@ -125,13 +125,16 @@ def search(request):
 
 
 def submit_review(request, product_id):
-    url = request.META.get('HTTP_REFERER')
+    url = request.META.get('HTTP_REFERER') or 'store'
+    if not request.user.is_authenticated:
+        return redirect('login')
     if request.method == 'POST':
         try:
             reviews = ReviewRating.objects.get(user__id=request.user.id, product__id=product_id)
             form = ReviewForm(request.POST, instance=reviews)
-            form.save()
-            messages.success(request, 'Thank you! Your review has been updated.')
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Thank you! Your review has been updated.')
             return redirect(url)
         except ReviewRating.DoesNotExist:
             form = ReviewForm(request.POST)
@@ -146,3 +149,5 @@ def submit_review(request, product_id):
                 data.save()
                 messages.success(request, 'Thank you! Your review has been submitted.')
                 return redirect(url)
+    # GET request or invalid form: go back safely (never return None)
+    return redirect(url)
